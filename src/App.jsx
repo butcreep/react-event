@@ -1,6 +1,8 @@
-import Admin from "./pages/admin";
-import Login from "./pages/login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Admin from "./pages/Admin";
+import Login from "./pages/Login";
+import Join from "./pages/Join";
+import JoinForm from "components/JoinForm";
 
 function App() {
   return (
@@ -9,6 +11,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/admin/login" element={<Login admin={true} />} />
         <Route path="/admin" element={<Admin />}></Route>
+        <Route path="/join" element={<Join />} />
+        <Route path="/join/:type" element={<JoinForm />} />
       </Routes>
     </BrowserRouter>
   );
