@@ -1,5 +1,5 @@
-import Admin from "./pages/admin";
-import Login from "./pages/login";
+import Admin from "./pages/Admin";
+import Login from "./pages/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
