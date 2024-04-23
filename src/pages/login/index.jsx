@@ -21,7 +21,7 @@ const LI = styled.li`
   &:not(:last-child)::after {
     content: "|";
     margin-left: 10px;
-    color: #000; /* |의 색상 설정 */
+    color: #000;
   }
 `;
 
@@ -39,7 +39,7 @@ const Login = ({ admin }) => {
 
         <UL className="flex justify-between items-center">
           <LI>
-            <Link to="/">회원가입</Link>
+            <Link to="/join">회원가입</Link>
           </LI>
           <LI>
             <Link to="/">아이디 찾기</Link>
@@ -56,26 +56,28 @@ const Login = ({ admin }) => {
           </div>
         )}
       </div>
-      <UL className="flex">
-        <LI>
-          <Link to="/">공지사항</Link>
-        </LI>
-        <LI>
-          <Link to="/">이용약관 및 개인정보 보호 방침</Link>
-        </LI>
-        <LI>
-          <Link to="/">고객문의이메일</Link>
-        </LI>
-        <LI>
-          <Link to="/">주소</Link>
-        </LI>
-        <LI>
-          <Link to="/">통신판매업신고번호</Link>
-        </LI>
-        <LI>
-          <Link to="/">사업자 등록번호</Link>
-        </LI>
-      </UL>
+      {!admin && (
+        <UL className="flex">
+          <LI>
+            <Link to="/">공지사항</Link>
+          </LI>
+          <LI>
+            <Link to="/">이용약관 및 개인정보 보호 방침</Link>
+          </LI>
+          <LI>
+            <Link to="/">고객문의이메일</Link>
+          </LI>
+          <LI>
+            <Link to="/">주소</Link>
+          </LI>
+          <LI>
+            <Link to="/">통신판매업신고번호</Link>
+          </LI>
+          <LI>
+            <Link to="/">사업자 등록번호</Link>
+          </LI>
+        </UL>
+      )}
     </div>
   );
 };
