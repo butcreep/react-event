@@ -3,6 +3,7 @@ import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import Join from "./pages/Join";
 import JoinForm from "components/JoinForm";
+import Agreement from "components/CheckForm";
 
 function App() {
   return (
@@ -12,6 +13,8 @@ function App() {
         <Route path="/admin/login" element={<Login admin={true} />} />
         <Route path="/admin" element={<Admin />}></Route>
         <Route path="/join" element={<Join />} />
+        <Route path="/agree" element={<Agreement />} />
+
         <Route path="/join/:type" element={<JoinForm />} />
       </Routes>
     </BrowserRouter>
