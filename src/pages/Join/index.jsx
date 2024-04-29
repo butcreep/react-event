@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Input, Button, Radio, Form, DatePicker, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
@@ -212,6 +213,7 @@ const Join = () => {
           </SubmitButton>
         </Form.Item>
       </Form>
+
     </div>
   );
 };
