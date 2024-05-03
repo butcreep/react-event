@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Join from "./pages/Join";
 import JoinForm from "components/JoinForm";
 import Agreement from "components/CheckForm";
+import LawyerInfo from "pages/Join/lawyerInfo";
+import SignUpForm from "pages/SignUpForm";
 
 function App() {
   return (
@@ -14,7 +16,9 @@ function App() {
         <Route path="/admin" element={<Admin />}></Route>
         <Route path="/join" element={<Join />} />
         <Route path="/agree" element={<Agreement />} />
+        <Route path="/lawInfo" element={<LawyerInfo />} />
 
+        <Route path="/signup" element={<SignUpForm />} />
         <Route path="/join/:type" element={<JoinForm />} />
       </Routes>
     </BrowserRouter>
