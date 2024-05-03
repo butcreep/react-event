@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input, Button } from "antd";
+import { Input, Button, Checkbox, Radio } from "antd";
 import { ReactComponent as Eye } from "assets/images/icons/eye.svg";
 import { ReactComponent as Eyeclose } from "assets/images/icons/eyeclose.svg";
 import MyButton from "components/header/MyButton";
@@ -26,6 +26,9 @@ const LI = styled.li`
 `;
 
 const Login = ({ admin }) => {
+  const onChange = e => {
+    console.log(`checked = ${e.target.checked}`);
+  };
   return (
     <div className="pt-[120px] flex flex-col justify-between w-full h-full login-main">
       <div className="w-[400px] mx-auto ">
@@ -56,28 +59,40 @@ const Login = ({ admin }) => {
           </div>
         )}
       </div>
-      {!admin && (
-        <UL className="flex">
-          <LI>
-            <Link to="/">공지사항</Link>
-          </LI>
-          <LI>
-            <Link to="/">이용약관 및 개인정보 보호 방침</Link>
-          </LI>
-          <LI>
-            <Link to="/">고객문의이메일</Link>
-          </LI>
-          <LI>
-            <Link to="/">주소</Link>
-          </LI>
-          <LI>
-            <Link to="/">통신판매업신고번호</Link>
-          </LI>
-          <LI>
-            <Link to="/">사업자 등록번호</Link>
-          </LI>
-        </UL>
-      )}
+      <Radio.Group className="grid grid-cols-4">
+        <Radio.Button value="kakao" onChange={onChange} className="w-16 h-16">
+          <img src={kakao} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+        <Radio.Button value="nini" onChange={onChange} className="w-16 h-16">
+          <img src={google} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+        <Radio.Button value="ka" onChange={onChange} className="w-16 h-16">
+          <img src={kakao} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+        <Radio.Button value="kao" onChange={onChange} className="w-16 h-16">
+          <img src={naver} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+        <Radio.Button value="kakaoy" onChange={onChange} className="w-16 h-16">
+          <img src={kakao} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+        <Radio.Button value="niniy" onChange={onChange} className="w-16 h-16">
+          <img src={google} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+        <Radio.Button value="kay" onChange={onChange} className="w-16 h-16">
+          <img src={kakao} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+        <Radio.Button value="kaoy" onChange={onChange} className="w-16 h-16">
+          <img src={naver} alt="" />
+          <p className="block text-xs">카카오로그인</p>
+        </Radio.Button>
+      </Radio.Group>
     </div>
   );
 };

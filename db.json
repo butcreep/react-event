@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": "4c8b",
+      "role": "lawyer",
+      "password": "day_eong25",
+      "confirm": "day_eong25",
+      "email": "gkdud404@naver.com",
+      "name": "송다영",
+      "birthday": "1991.02.05",
+      "phoneNumber": "010-3339-8058",
+      "gender": "woman",
+      "authenticationCode": "7777777",
+      "time": "3"
+    },
+    {
+      "id": "7d08",
+      "role": "lawyer",
+      "password": "Thdekdrn9125!",
+      "confirm": "Thdekdrn9125!",
+      "email": "storyno7@gmail.com",
+      "name": "송딩구",
+      "birthday": "1996.04.05",
+      "phoneNumber": "010-8013-8058",
+      "gender": "woman",
+      "authenticationCode": "66666666",
+      "time": "6"
+    }
+  ]
+}
