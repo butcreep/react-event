@@ -26,5 +26,21 @@
       "authenticationCode": "66666666",
       "time": "6"
     }
+  ],
+  "mails": [
+    {
+      "id": "d3d7",
+      "title": "다시 드가보자",
+      "description": "다시 드가보자"
+    },
+    {
+      "id": "5f45",
+      "title": "다시!!",
+      "description": "다시!!!!!!!!!"
+    },
+    {
+      "id": "3403",
+      "content": "오호 제출이 되나요"
+    }
   ]
 }
