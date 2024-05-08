@@ -1,172 +1,70 @@
-// import React, { useState } from "react";
-// import { Upload, Button, message, Form, Input } from "antd";
-// import { UploadOutlined } from "@ant-design/icons";
-// import axios from "axios";
-
-// function QuestPost() {
-//   const [fileList, setFileList] = useState([]);
-
-//   const onChange = ({ fileList: newFileList }) => {
-//     setFileList(newFileList);
-//   };
-
-//   const onPreview = async file => {
-//     let src = file.url;
-//     if (!src) {
-//       src = await new Promise(resolve => {
-//         const reader = new FileReader();
-//         reader.readAsDataURL(file.originFileObj);
-//         reader.onload = () => resolve(reader.result);
-//       });
-//     }
-//     const image = new Image();
-//     image.src = src;
-//     const imgWindow = window.open(src);
-//     imgWindow.document.write(image.outerHTML);
-//   };
-
-//   const onFinish = async values => {
-//     // Assume the server expects 'title', 'description', and 'imageUrl' keys
-//     const postData = {
-//       title: values.title,
-//       description: values.description,
-//       imageUrl: fileList.length > 0 ? fileList[0].thumbUrl : null,
-//     };
-//     try {
-//       const response = await axios.post("http://localhost:3001/mails", postData);
-//       message.success("Post submitted successfully!");
-//       console.log(response.data); // 응답 로그 출력
-//       setFileList([]); // Clear the uploaded file list after submitting
-//     } catch (error) {
-//       message.error("Failed to submit post");
-//       console.error(error);
-//     }
-//   };
-
-//   const uploadButton = <Button icon={<UploadOutlined />}>Upload</Button>;
-
-//   return (
-//     <Form onFinish={onFinish} layout="vertical" style={{ width: 400, margin: "100px auto" }}>
-//       <Form.Item name="title" label="Title" rules={[{ required: true, message: "Please input a title!" }]}>
-//         <Input placeholder="Enter the title of the post" />
-//       </Form.Item>
-//       <Form.Item name="description" label="Description">
-//         <Input.TextArea rows={4} placeholder="Enter a description" />
-//       </Form.Item>
-//       <Form.Item label="Upload Image">
-//         <Upload
-//           listType="picture-card"
-//           fileList={fileList}
-//           onChange={onChange}
-//           onPreview={onPreview}
-//           beforeUpload={() => false} // Do not automatically upload
-//         >
-//           {fileList.length < 1 && uploadButton}
-//         </Upload>
-//       </Form.Item>
-//       <Form.Item>
-//         <Button type="primary" htmlType="submit">
-//           Submit Post
-//         </Button>
-//       </Form.Item>
-//     </Form>
-//   );
-// }
-
-// export default QuestPost;import React, { useState } from "react";
-
-import React, { useState } from "react";
-import { Upload, Button, message, Form, Input } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import React, { useRef } from "react";
+import { Input, Form, Select, Button, message } from "antd";
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/i18n/ko-kr";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { useFormik } from "formik";
 import axios from "axios";
+const QuestPost = () => {
+  const editorRef = useRef();
 
-function QuestPost() {
-  const [fileList, setFileList] = useState([]);
-  const onChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  // Formik hook을 사용하여 폼 상태 관리
+  const formik = useFormik({
+    initialValues: {
+      content: "",
+    },
+    onSubmit: async values => {
+      try {
+        const response = await axios.post("http://localhost:3001/mails", values);
+        console.log("Server Response:", response.data);
+        message.success("메일이 성공적으로 전송되었습니다.");
+      } catch (error) {
+        console.error("Error sending mail:", error);
+        message.error("메일 전송에 실패했습니다.");
+      }
+    },
+  });
+
+  const handleSubmit = () => {
+    // 에디터에서 마크다운 데이터 가져오기
+    const markdown = editorRef.current.getInstance().getMarkdown();
+    // Formik의 values 설정
+    formik.setFieldValue("content", markdown, false);
+    // 폼 제출
+    formik.handleSubmit();
   };
-
-  const onPreview = async file => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise(resolve => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow.document.write(image.outerHTML);
-  };
-  const uploadButton = <Button icon={<UploadOutlined />}>Upload</Button>;
-  const customRequest = ({ file, onProgress, onSuccess, onError }) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    axios
-      .post("http://localhost:3001/mails", formData, {
-        onUploadProgress: ({ total, loaded }) => {
-          onProgress({ percent: Math.round((loaded / total) * 100) });
-        },
-      })
-      .then(response => {
-        onSuccess(response.data);
-        setFileList([]); // Clear the uploaded file list after submitting
-        message.success("File uploaded successfully!");
-      })
-      .catch(error => {
-        onError(error);
-        message.error("Failed to upload file");
-      });
-  };
-
-  const onFinish = async values => {
-    // Assume the server expects 'title', 'description', and 'imageUrl' keys
-    const postData = {
-      title: values.title,
-      description: values.description,
-      imageUrl: fileList.length > 0 ? fileList[0].thumbUrl : null,
-    };
-    try {
-      const response = await axios.post("http://localhost:3001/mails", postData);
-      message.success("Post submitted successfully!");
-      console.log(response.data); // 응답 로그 출력
-      setFileList([]); // Clear the uploaded file list after submitting
-    } catch (error) {
-      message.error("Failed to submit post");
-      console.error(error);
-    }
-  };
-
   return (
-    <Form onFinish={onFinish} layout="vertical" style={{ width: 400, margin: "100px auto" }}>
-      <Form.Item name="title" label="Title" rules={[{ required: true, message: "Please input a title!" }]}>
-        <Input placeholder="Enter the title of the post" />
-      </Form.Item>
-      <Form.Item name="description" label="Description">
-        <Input.TextArea rows={4} placeholder="Enter a description" />
-      </Form.Item>
-      <Form.Item label="Upload Image">
-        <Upload
-          listType="picture-card"
-          fileList={fileList}
-          customRequest={customRequest}
-          onPreview={onPreview}
-          onChange={onChange}
-          beforeUpload={() => false} // Do not automatically upload
-        >
-          {fileList.length < 1 && uploadButton}
-        </Upload>
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit Post
-        </Button>
-      </Form.Item>
-    </Form>
+    <div>
+      <Form onFinish={handleSubmit}>
+        <Form.Item>
+          <Input></Input>
+          <Select></Select>
+        </Form.Item>
+
+        <Editor
+          toolbarItems={[
+            // 툴바 옵션 설정
+            ["heading", "bold", "italic", "strike"],
+            ["hr", "quote"],
+            ["ul", "ol", "task", "indent", "outdent"],
+            ["table", "image", "link"],
+            ["code", "codeblock"],
+          ]}
+          height="500px" // 에디터 창 높이
+          initialEditType="markdown" // 기본 에디터 타입 (or wysiwyg)
+          // previewStyle="vertical" // 미리보기 스타일 (or tab) (verttical은 양쪽이 나뉨)
+          ref={editorRef}
+          language="ko-KR"
+          initialValue="Hello Toast UI Editor!"
+        ></Editor>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
-}
+};
 
 export default QuestPost;
