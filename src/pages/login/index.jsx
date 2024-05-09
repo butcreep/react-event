@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Input, Button, Checkbox, Radio } from "antd";
 import { ReactComponent as Eye } from "assets/images/icons/eye.svg";
 import { ReactComponent as Eyeclose } from "assets/images/icons/eyeclose.svg";
-import MyButton from "components/header/MyButton";
+import MyButton from "components/MyButton";
 import kakao from "assets/images/icons/kakao.svg";
 import google from "assets/images/icons/Google.svg";
 import naver from "assets/images/icons/naver.svg";
