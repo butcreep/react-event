@@ -71,6 +71,7 @@ const Join = () => {
       <Form form={form} onFinish={onFinish} autoComplete="off" onValuesChange={handleFormChange}>
         <div className="flex gap-2 flex-col">
           <Form.Item
+            name="userId"
             rules={[{ whitespace: true, required: true, message: "아이디는 필수로 입력해야 합니다!" }]}
             validateTrigger="onBlur"
           >

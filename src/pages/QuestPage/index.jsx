@@ -1,116 +1,51 @@
 import React from "react";
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const { Content, Sider } = Layout;
 
 const items = [
   {
-    key: "sub1",
-    label: "Navigation One",
+    key: "All_request",
+    label: "전체 의뢰함",
     icon: <MailOutlined />,
     children: [
       {
-        key: "g1",
-        label: "Item 1",
-        type: "group",
-        children: [
-          {
-            key: "1",
-            label: "Option 1",
-          },
-          {
-            key: "2",
-            label: "Option 2",
-          },
-        ],
+        key: "1",
+        label: "신청중",
       },
       {
-        key: "g2",
-        label: "Item 2",
-        type: "group",
-        children: [
-          {
-            key: "3",
-            label: "Option 3",
-          },
-          {
-            key: "4",
-            label: "Option 4",
-          },
-        ],
+        key: "2",
+        label: "보류중",
+      },
+      {
+        key: "3",
+        label: "신청완료",
+      },
+      {
+        key: "4",
+        label: "신청거절",
       },
     ],
   },
   {
     key: "sub2",
-    label: "Navigation Two",
+    label: "중요 의뢰함",
     icon: <AppstoreOutlined />,
-    children: [
-      {
-        key: "5",
-        label: "Option 5",
-      },
-      {
-        key: "6",
-        label: "Option 6",
-      },
-      {
-        key: "sub3",
-        label: "Submenu",
-        children: [
-          {
-            key: "7",
-            label: "Option 7",
-          },
-          {
-            key: "8",
-            label: "Option 8",
-          },
-        ],
-      },
-    ],
   },
+  {
+    key: "sub4",
+    label: "종료된 의뢰함",
+    icon: <SettingOutlined />,
+  },
+
   {
     type: "divider",
   },
   {
-    key: "sub4",
-    label: "Navigation Three",
+    key: "sub5",
+    label: "휴지통",
     icon: <SettingOutlined />,
-    children: [
-      {
-        key: "9",
-        label: "Option 9",
-      },
-      {
-        key: "10",
-        label: "Option 10",
-      },
-      {
-        key: "11",
-        label: "Option 11",
-      },
-      {
-        key: "12",
-        label: "Option 12",
-      },
-    ],
-  },
-  {
-    key: "grp",
-    label: "Group",
-    type: "group",
-    children: [
-      {
-        key: "13",
-        label: "Option 13",
-      },
-      {
-        key: "14",
-        label: "Option 14",
-      },
-    ],
   },
 ];
 const QuestPage = () => {
@@ -121,11 +56,11 @@ const QuestPage = () => {
   const onClick = e => {
     navigate(`/board/${e.key}`);
   };
+  const { type } = useParams();
 
   return (
     <Layout>
       <Sider
-        width={200}
         style={{
           background: colorBgContainer,
         }}
@@ -141,21 +76,17 @@ const QuestPage = () => {
           items={items}
         />
       </Sider>
-      <Layout
-        style={{
-          padding: "0 24px 24px",
-        }}
-      >
+      <Layout>
         <Content
           style={{
-            padding: 24,
+            padding: 50,
             margin: 0,
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
-          Content
+          Content {type}
         </Content>
       </Layout>
     </Layout>
