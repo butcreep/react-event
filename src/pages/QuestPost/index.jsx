@@ -5,7 +5,6 @@ import "@toast-ui/editor/dist/i18n/ko-kr";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { useFormik } from "formik";
 import axios from "axios";
-
 import { useMessageApi } from "components/AppLayout";
 import { useNavigate } from "react-router-dom";
 
@@ -34,6 +33,11 @@ const QuestPost = () => {
       };
       try {
         // 에디터 내용과 셀렉트박스 값이 포함된 values를 서버로 전송
+        // const response = await axios.post(
+        //   "https://397d165c-e839-454e-9f01-613512dbf6e4.mock.pstmn.io/mails",
+
+        //   dataToSend,
+        // );
         const response = await axios.post("http://localhost:3001/mails", dataToSend);
         console.log("Server Response:", response.data);
         messageApi.success("게시글이 등록되었습니다!");

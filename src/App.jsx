@@ -10,6 +10,7 @@ import LawyerInfo from "pages/Join/lawyerInfo";
 import SignUpForm from "pages/SignUpForm";
 import Header from "components/Header";
 import QuestPage from "pages/QuestPage";
+import FindUserId from "pages/FindUserId";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/join/:type" element={<JoinForm />} />
           <Route path="/mail/quest" element={<QuestPost />} />
+          <Route path="/find_id" element={<FindUserId />} />
           <Route path="/" element={<LayoutWithHeader />}>
             <Route path="/board" element={<QuestPage />} />
             <Route path="/board/:type" element={<QuestPage />} />
