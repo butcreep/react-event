@@ -33,8 +33,8 @@ const QuestPage = () => {
           time: item.time,
         }));
         const nonTrashData = formattedData.filter(mail => mail.statue !== "휴지통");
-        setData(nonTrashData);
-        setMails(nonTrashData);
+        setData(formattedData);
+        setMails(nonTrashData); // 전체보기에는 휴지통 제외
 
         const counts = {
           total: nonTrashData.length,
