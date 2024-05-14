@@ -17,32 +17,33 @@ const QuestPage = () => {
     completed: 0,
     refuse: 0,
     important: 0,
+    trash: 0,
   });
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Function to fetch data
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://397d165c-e839-454e-9f01-613512dbf6e4.mock.pstmn.io/mails");
+        const response = await axios.get("http://localhost:3001/mails");
         const formattedData = response.data.map(item => ({
           ...item,
           key: item.id,
-          category: "Text",
+          category: item.category,
           sentAt: moment(item.sentAt).format("YYYY. MM. DD"),
-          isImportant: false,
           time: item.time,
         }));
-        setData(formattedData);
-        setMails(formattedData);
+        const nonTrashData = formattedData.filter(mail => mail.statue !== "휴지통");
+        setData(nonTrashData);
+        setMails(nonTrashData);
 
         const counts = {
-          total: response.data.length,
-          preparing: response.data.filter(mail => mail.statue === "preparing").length,
-          pending: response.data.filter(mail => mail.statue === "pending").length,
-          completed: response.data.filter(mail => mail.statue === "completed").length,
-          refuse: response.data.filter(mail => mail.statue === "refuse").length,
-          important: response.data.filter(mail => mail.isImportant).length,
+          total: nonTrashData.length,
+          preparing: formattedData.filter(mail => mail.statue === "preparing").length,
+          pending: formattedData.filter(mail => mail.statue === "pending").length,
+          completed: formattedData.filter(mail => mail.statue === "completed").length,
+          refuse: formattedData.filter(mail => mail.statue === "refuse").length,
+          important: formattedData.filter(mail => mail.isImportant).length,
+          trash: formattedData.filter(mail => mail.statue === "휴지통").length,
         };
         setCounts(counts);
       } catch (error) {
@@ -114,8 +115,13 @@ const QuestPage = () => {
       type: "divider",
     },
     {
-      key: "sub5",
-      label: "휴지통",
+      key: "trash",
+      label: (
+        <span>
+          휴지통 <span style={{ color: "grey" }}>{counts.trash}</span>
+        </span>
+      ),
+      onTitleClick: () => handleMenuClick("trash"),
     },
   ];
 
@@ -127,6 +133,10 @@ const QuestPage = () => {
       const importantMails = data.filter(mail => mail.isImportant);
       setMails(importantMails); // 중요 메일 데이터 설정
       navigate(`/board?status=important`); // 쿼리스트링을 사용하여 이동
+    } else if (statusKey === "trash") {
+      const trashMails = data.filter(mail => mail.statue === "휴지통");
+      setMails(trashMails); // 휴지통 메일 데이터 설정
+      navigate(`/board?status=trash`); // 쿼리스트링을 사용하여 이동
     } else {
       const filteredMails = data.filter(mail => mail.statue === statusKey);
       setMails(filteredMails); // 필터링된 메일 데이터 상태 업데이트
@@ -139,8 +149,7 @@ const QuestPage = () => {
     handleMenuClick(statusKey);
   };
 
-  // 토글 중요성 함수
-  const toggleImportant = (id, event) => {
+  const toggleImportant = async (id, event) => {
     event.stopPropagation();
     const newData = data.map(item => {
       if (item.id === id) {
@@ -148,39 +157,20 @@ const QuestPage = () => {
       }
       return item;
     });
-    setData(newData);
 
-    // Update the important count
     const importantCount = newData.filter(item => item.isImportant).length;
     setCounts({ ...counts, important: importantCount });
+    setData(newData);
+
+    try {
+      const updatedItem = newData.find(item => item.id === id);
+      await axios.patch(`http://localhost:3001/mails/${id}`, {
+        isImportant: updatedItem.isImportant,
+      });
+    } catch (error) {
+      console.error("Error updating important status:", error);
+    }
   };
-  //patch 사용
-  // const toggleImportant = async (id, event) => {
-  //   event.stopPropagation();
-  //   const newData = data.map(item => {
-  //     if (item.id === id) {
-  //       item.isImportant = !item.isImportant;
-  //     }
-  //     return item;
-  //   });
-
-  //   // Update the important count
-  //   const importantCount = newData.filter(item => item.isImportant).length;
-  //   setCounts({ ...counts, important: importantCount });
-
-  //   // Optimistically update the UI
-  //   setData(newData);
-
-  //   // Send the update to the server
-  //   try {
-  //     const updatedItem = newData.find(item => item.id === id);
-  //     await axios.patch(`https://397d165c-e839-454e-9f01-613512dbf6e4.mock.pstmn.io/mails/${id}`, {
-  //       isImportant: updatedItem.isImportant,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error updating important status:", error);
-  //   }
-  // };
 
   const handleTimeFilterChange = value => {
     setTimeColumn(value);
@@ -193,8 +183,8 @@ const QuestPage = () => {
       width: 48,
       onCell: record => ({
         onClick: e => {
-          e.stopPropagation(); // 이벤트 버블링 중지
-          toggleImportant(record.id, e); // 중요 표시 토글 함수 호출
+          e.stopPropagation();
+          toggleImportant(record.id, e);
         },
       }),
       render: (_, record) => (
@@ -218,7 +208,6 @@ const QuestPage = () => {
     { title: "분야", dataIndex: "category", key: "category", width: "10%" },
     { title: "세부 분야", dataIndex: "anytime", key: "anytime" },
     { title: "제목", dataIndex: "title", key: "title", width: "30%" },
-    // { title: "의뢰 요청시간", dataIndex: "sentAt", key: "sentAt" },
     {
       title: (
         <Select defaultValue="sentAt" style={{ width: 120 }} onChange={handleTimeFilterChange}>
@@ -232,7 +221,7 @@ const QuestPage = () => {
   ];
 
   const paginationConfig = {
-    pageSize: 10, // Set the number of items per page
+    pageSize: 10,
     position: ["bottomCenter"],
   };
 
@@ -253,14 +242,14 @@ const QuestPage = () => {
       </div>
 
       <div className="mt-6 mx-8 w-full">
-        <h2 className=" font-bold text-[20px] pb-3">전체 의뢰함</h2>
+        <h2 className="font-bold text-[20px] pb-3">전체 의뢰함</h2>
         <Table
-          dataSource={mails} // mails를 사용하여 필터링된 데이터를 표시
+          dataSource={mails}
           columns={columns}
           pagination={paginationConfig}
           onRow={(record, rowIndex) => {
             return {
-              onClick: () => navigate(`/detail/${record.key}`), // rowIndex 대신 record.key 사용
+              onClick: () => navigate(`/detail/${record.key}`),
             };
           }}
         />
