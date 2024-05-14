@@ -11,6 +11,7 @@ import SignUpForm from "pages/SignUpForm";
 import Header from "components/Header";
 import QuestPage from "pages/QuestPage";
 import FindUserId from "pages/FindUserId";
+import DetailPage from "pages/DetailPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/mail/quest" element={<QuestPost />} />
           <Route path="/find_id" element={<FindUserId />} />
           <Route path="/" element={<LayoutWithHeader />}>
+            <Route path="/detail/:id" element={<DetailPage />} />
             <Route path="/board" element={<QuestPage />} />
             <Route path="/board/:type" element={<QuestPage />} />
           </Route>
