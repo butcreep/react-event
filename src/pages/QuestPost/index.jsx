@@ -45,7 +45,7 @@ const QuestPost = () => {
       };
       try {
         // 에디터 내용과 셀렉트박스 값이 포함된 values를 서버로 전송
-        const response = await axios.post("http://localhost:3001/mails", dataToSend);
+        const response = await axios.post("https://sturdy-maroon-objective.glitch.me/mails", dataToSend);
         console.log("Server Response:", response.data);
         messageApi.success("게시글이 등록되었습니다!");
         formik.resetForm();

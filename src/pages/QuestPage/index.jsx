@@ -24,7 +24,7 @@ const QuestPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/mails");
+        const response = await axios.get("https://sturdy-maroon-objective.glitch.me/mails");
         const formattedData = response.data.map(item => ({
           ...item,
           key: item.id,
