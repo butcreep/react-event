@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { Button, Menu, Select, Table } from "antd";
-import { Link, useNavigate } from "react-router-dom";
-import moment from "moment";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import StatusTag from "components/Tags";
+import useFetchMails from "components/hooks/useFetchMails";
+import axios from "axios";
+import DetailPage from "pages/DetailPage";
 
 const QuestPage = () => {
+  const { data, error, loading } = useFetchMails("https://sturdy-maroon-objective.glitch.me/mails");
   const [mails, setMails] = useState([]);
-  const [data, setData] = useState([]);
   const [timeColumn, setTimeColumn] = useState("sentAt");
   const [counts, setCounts] = useState({
     total: 0,
@@ -19,40 +20,27 @@ const QuestPage = () => {
     important: 0,
     trash: 0,
   });
+
   const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://sturdy-maroon-objective.glitch.me/mails");
-        const formattedData = response.data.map(item => ({
-          ...item,
-          key: item.id,
-          category: item.category,
-          sentAt: moment(item.sentAt).format("YYYY. MM. DD"),
-          time: item.time,
-        }));
-        const nonTrashData = formattedData.filter(mail => mail.statue !== "휴지통");
-        setData(formattedData);
-        setMails(nonTrashData); // 전체보기에는 휴지통 제외
+    if (data.length > 0) {
+      const nonTrashData = data.filter(mail => mail.statue !== "휴지통");
+      setMails(nonTrashData); // 전체보기에는 휴지통 제외
 
-        const counts = {
-          total: nonTrashData.length,
-          preparing: formattedData.filter(mail => mail.statue === "preparing").length,
-          pending: formattedData.filter(mail => mail.statue === "pending").length,
-          completed: formattedData.filter(mail => mail.statue === "completed").length,
-          refuse: formattedData.filter(mail => mail.statue === "refuse").length,
-          important: formattedData.filter(mail => mail.isImportant).length,
-          trash: formattedData.filter(mail => mail.statue === "휴지통").length,
-        };
-        setCounts(counts);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+      const counts = {
+        total: nonTrashData.length,
+        preparing: data.filter(mail => mail.statue === "preparing").length,
+        pending: data.filter(mail => mail.statue === "pending").length,
+        completed: data.filter(mail => mail.statue === "completed").length,
+        refuse: data.filter(mail => mail.statue === "refuse").length,
+        important: data.filter(mail => mail.isImportant).length,
+        trash: data.filter(mail => mail.statue === "휴지통").length,
+      };
+      setCounts(counts);
+    }
+  }, [data]);
 
   const items = [
     {
@@ -160,11 +148,11 @@ const QuestPage = () => {
 
     const importantCount = newData.filter(item => item.isImportant).length;
     setCounts({ ...counts, important: importantCount });
-    setData(newData);
+    setMails(newData);
 
     try {
       const updatedItem = newData.find(item => item.id === id);
-      await axios.patch(`http://localhost:3001/mails/${id}`, {
+      await axios.patch(`https://sturdy-maroon-objective.glitch.me/mails/${id}`, {
         isImportant: updatedItem.isImportant,
       });
     } catch (error) {
@@ -225,6 +213,9 @@ const QuestPage = () => {
     position: ["bottomCenter"],
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data</div>;
+
   return (
     <div className="flex w-full">
       <div className="w-[245px] px-4 h-screen border-e-[1px] shrink-0">
@@ -242,17 +233,23 @@ const QuestPage = () => {
       </div>
 
       <div className="mt-6 mx-8 w-full">
-        <h2 className="font-bold text-[20px] pb-3">전체 의뢰함</h2>
-        <Table
-          dataSource={mails}
-          columns={columns}
-          pagination={paginationConfig}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: () => navigate(`/detail/${record.key}`),
-            };
-          }}
-        />
+        {id ? (
+          <DetailPage />
+        ) : (
+          <>
+            <h2 className="font-bold text-[20px] pb-3">전체 의뢰함</h2>
+            <Table
+              dataSource={mails}
+              columns={columns}
+              pagination={paginationConfig}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: () => navigate(`/detail/${record.key}`),
+                };
+              }}
+            />
+          </>
+        )}
       </div>
     </div>
   );
