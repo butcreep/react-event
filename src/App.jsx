@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import AppLayout from "components/AppLayout";
-import Admin from "./pages/Admin";
+// import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import Join from "./pages/Join";
 import QuestPost from "./pages/QuestPost";
@@ -20,7 +20,7 @@ function App() {
         <Route path="/" element={<AppLayout />}>
           <Route path="/" element={<Login />} />
           <Route path="/admin/login" element={<Login admin={true} />} />
-          <Route path="/admin" element={<Admin />}></Route>
+          {/* <Route path="/admin" element={<Admin />}></Route> */}
           <Route path="/join" element={<Join />} />
           <Route path="/agree" element={<Agreement />} />
           <Route path="/lawInfo" element={<LawyerInfo />} />
