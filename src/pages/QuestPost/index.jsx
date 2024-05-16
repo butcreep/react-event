@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Form, Select, Button, Checkbox, Modal } from "antd";
-import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/i18n/ko-kr";
-import "@toast-ui/editor/dist/toastui-editor.css";
+import MDEditor from "@uiw/react-md-editor";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 import { useFormik } from "formik";
 import axios from "axios";
 
@@ -11,7 +11,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 const QuestPost = () => {
-  const editorRef = useRef();
   const navigate = useNavigate();
 
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -27,6 +26,7 @@ const QuestPost = () => {
       document.body.style.overflow = "auto"; // 스크롤 활성화
     };
   }, []);
+
   // Formik hook을 사용하여 폼 상태 관리
   const formik = useFormik({
     initialValues: {
@@ -56,6 +56,7 @@ const QuestPost = () => {
       }
     },
   });
+
   // 모달을 열기
   const showModal = () => {
     setIsModalVisible(true);
@@ -71,9 +72,8 @@ const QuestPost = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
   const handleSubmit = () => {
-    const markdown = editorRef.current.getInstance().getMarkdown();
-    formik.setFieldValue("content", markdown, false);
     showModal(); // 제출 전 모달 보여주기
   };
 
@@ -158,37 +158,37 @@ const QuestPost = () => {
                     placeholder="세부 분야 선택"
                     onChange={value => formik.setFieldValue("category", value)}
                   >
-                    <Select.Option class="text-gray-500" value="주주간 계약서">
+                    <Select.Option className="text-gray-500" value="주주간 계약서">
                       주주간 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="동업 계약서">
+                    <Select.Option className="text-gray-500" value="동업 계약서">
                       동업 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="용역(개발, 디자인 등) 계약서">
+                    <Select.Option className="text-gray-500" value="용역(개발, 디자인 등) 계약서">
                       용역(개발, 디자인 등) 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="근로 계약서">
+                    <Select.Option className="text-gray-500" value="근로 계약서">
                       근로 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="거래 계약서">
+                    <Select.Option className="text-gray-500" value="거래 계약서">
                       거래 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="투자 계약서">
+                    <Select.Option className="text-gray-500" value="투자 계약서">
                       투자 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="스톡옵션 계약서">
+                    <Select.Option className="text-gray-500" value="스톡옵션 계약서">
                       스톡옵션 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="비밀유지(보안) 계약서">
+                    <Select.Option className="text-gray-500" value="비밀유지(보안) 계약서">
                       비밀유지(보안) 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="이익 분배 계약서">
+                    <Select.Option className="text-gray-500" value="이익 분배 계약서">
                       이익 분배 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="저작권 이용허락(양도 등) 계약서">
+                    <Select.Option className="text-gray-500" value="저작권 이용허락(양도 등) 계약서">
                       저작권 이용허락(양도 등) 계약서
                     </Select.Option>
-                    <Select.Option class="text-gray-500" value="기타 계약서">
+                    <Select.Option className="text-gray-500" value="기타 계약서">
                       기타 계약서
                     </Select.Option>
                   </Select>
@@ -261,19 +261,10 @@ const QuestPost = () => {
               <p>
                 의뢰 내용<span>(100자 이상)</span>
               </p>
-              <Editor
-                toolbarItems={[
-                  ["heading", "bold", "italic", "strike"],
-                  ["hr", "quote"],
-                  ["ul", "ol", "task", "indent", "outdent"],
-                  ["table", "link"],
-                ]}
-                height="500px"
-                initialEditType="wysiwyg"
-                ref={editorRef}
-                hideModeSwitch={true}
-                language="ko-KR"
-                initialValue="내용을 입력하세요"
+              <MDEditor
+                value={formik.values.content}
+                onChange={value => formik.setFieldValue("content", value)}
+                height={500}
               />
             </Form.Item>
             <Form.Item>
@@ -290,6 +281,7 @@ const QuestPost = () => {
     </div>
   );
 };
+
 const FormDiv = styled.div`
   p:not(.toastui-editor-defaultUI p) {
     font-size: 16px;

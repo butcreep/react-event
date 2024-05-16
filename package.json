@@ -9,7 +9,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@toast-ui/react-editor": "^3.2.3",
+    "@uiw/react-md-editor": "^4.0.4",
     "antd": "^5.17.0",
     "aws-sdk": "^2.1615.0",
     "axios": "^1.6.8",
@@ -38,8 +38,7 @@
     "dev": "concurrently \"npm run start\" \"npm run server\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "install": "npm install --legacy-peer-deps"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
