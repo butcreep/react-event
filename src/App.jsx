@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import AppLayout from "components/AppLayout";
 
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import Join from "./pages/Join";
 import QuestPost from "./pages/QuestPost";
 import JoinForm from "components/JoinForm";
