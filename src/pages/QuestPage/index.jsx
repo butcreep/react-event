@@ -5,7 +5,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import StatusTag from "components/Tags";
 import useFetchMails from "components/hooks/useFetchMails";
 import axios from "axios";
-import DetailPage from "pages/DetailPage";
 
 const QuestPage = () => {
   const { data, error, loading } = useFetchMails("https://sturdy-maroon-objective.glitch.me/mails");
@@ -233,23 +232,17 @@ const QuestPage = () => {
       </div>
 
       <div className="mt-6 mx-8 w-full">
-        {id ? (
-          <DetailPage />
-        ) : (
-          <>
-            <h2 className="font-bold text-[20px] pb-3">전체 의뢰함</h2>
-            <Table
-              dataSource={mails}
-              columns={columns}
-              pagination={paginationConfig}
-              onRow={(record, rowIndex) => {
-                return {
-                  onClick: () => navigate(`/detail/${record.key}`),
-                };
-              }}
-            />
-          </>
-        )}
+        <h2 className="font-bold text-[20px] pb-3">전체 의뢰함</h2>
+        <Table
+          dataSource={mails}
+          columns={columns}
+          pagination={paginationConfig}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: () => navigate(`/detail/${record.id}`), // 수정: record.key -> record.id
+            };
+          }}
+        />
       </div>
     </div>
   );
