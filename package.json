@@ -30,10 +30,11 @@
     "styled-component": "^2.8.0",
     "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4",
-    "webpack": "^4.42.0"
+    "webpack": "^4.42.0",
+    "json-server": "^0.17.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
     "server": "json-server --watch db.json --port 3001",
     "dev": "concurrently \"npm run start\" \"npm run server\"",
     "build": "react-scripts build",
