@@ -8,7 +8,7 @@ import JoinForm from "components/JoinForm";
 import Agreement from "components/CheckForm";
 import LawyerInfo from "pages/Join/lawyerInfo";
 import SignUpForm from "pages/SignUpForm";
-import Header from "components/Header";
+import Header from "components/header";
 import QuestPage from "pages/QuestPage";
 import FindUserId from "pages/FindUserId";
 import DetailPage from "pages/DetailPage";
